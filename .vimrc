@@ -27,18 +27,27 @@ Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'dense-analysis/ale'
 Plugin 'nikvdp/ejs-syntax'
-Plugin 'pangloss/vim-javascript'
+""Plugin 'pangloss/vim-javascript'
 Plugin 'briancollins/vim-jst'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
 Bundle 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'morhetz/gruvbox'
+Plugin 'suoto/vim-hdl'
+"Plugin 'vhda/verilog_systemverilog.vim'
+""Plugin 'Cognoscan/vim-vhdl'
+""Plugin 'xolox/vim-tlv-mode'
 ""Plugin 'patstockwell/vim-monokai-tasty'
 ""Plugin 'rdnetto/YCM-Generator'
 ""Plugin 'tell-k/vim-autopep8'
 ""Plugin 'wsdjeg/FlyGrep.vim'
 "Plugin 'psf/black'
+Plugin 'pangloss/vim-javascript'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'peitalin/vim-jsx-typescript'
+Plugin 'styled-components/vim-styled-components', { 'branch': 'main'}
+Plugin 'jparise/vim-graphql'
 
 "plugin line end here
 call vundle#end()
@@ -258,10 +267,14 @@ nnoremap <C-X> :bdelete<CR>
 let g:ale_fixers={
                         \ '*': ['remove_trailing_lines', 'trim_whitespace'],
         		        \ 'javascript':['eslint'],
+                        \ 'typescript':['prettier'],
+                        \ 'css':['prettier'],
+                        \ 'html':['prettier'],
                         \}
 
 let g:ale_linters={
                         \ 'javascript': ['eslint'],
+                        \ 'typescript':['tsserver', 'tslint'],
                         \ 'python': ['pylint'],
                         \ 'haskell': ['hlint', 'hdevtools', 'hfmt'],
                         \}
@@ -335,16 +348,14 @@ let g:gruvbox_contrast_dark = 'hard'
 set background=dark
 colorscheme gruvbox
 
+""colorscheme desert
 
+"colorscheme verilog_systemverilog
 
+""colorscheme darkblue
+""let &termencoding=&encoding
+""set fileencodings=utf-8,gbk,ucs-bom,cp936
 
-
-
-
-
-
-
-
-
-
-"
+""javascript / typescript
+autocmd BufEnter *.{js.jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js.jsx,ts,tsx} :syntax sync clear
