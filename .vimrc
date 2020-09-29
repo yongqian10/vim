@@ -30,12 +30,13 @@ Plugin 'nikvdp/ejs-syntax'
 ""Plugin 'pangloss/vim-javascript'
 Plugin 'briancollins/vim-jst'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
+""Plugin 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
+Plugin 'neoclide/coc.nvim' , {'branch' : 'release'}
 Bundle 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'morhetz/gruvbox'
-Plugin 'suoto/vim-hdl'
-"Plugin 'vhda/verilog_systemverilog.vim'
+""Plugin 'suoto/vim-hdl'
+""Plugin 'vhda/verilog_systemverilog.vim'
 ""Plugin 'Cognoscan/vim-vhdl'
 ""Plugin 'xolox/vim-tlv-mode'
 ""Plugin 'patstockwell/vim-monokai-tasty'
@@ -307,12 +308,12 @@ let g:ale_cpp_cppcheck_options=''
 "                                \ 'g:ycm_python_sys_path'
 "                                \]
 "
-"let g:ycm_global_ycm_extra_conf='~/global_etra_conf.py'
-let g:SimplyIFold_docstring_preview=1
-let g:ycm_server_python_interpreter='/usr/bin/python3'
-let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"""let g:ycm_global_ycm_extra_conf='~/global_etra_conf.py'
+""let g:SimplyIFold_docstring_preview=1
+""let g:ycm_server_python_interpreter='/usr/bin/python3'
+""let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+""let g:ycm_autoclose_preview_window_after_completion=1
+""map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 """"""""""""""""""""""""""""""""""""""""
 "psf/black
@@ -326,13 +327,13 @@ map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "YCM-Generator
 """"""""""""""""""""""""""""""""""""""""
 ""noremap <C-I> :YcmGenerateConfig -c g++ -v -x c++ -f -b make .<CR>
-let g:ycm_show_diagnostics_ui=0
-let g:ycm_min_num_of_chars_for_completion = 4
-let g:ycm_min_num_identifier_canddate_chars = 4
-let g:ycm_enable_diagnastic_highlighting =0
-
-set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = 0
+""let g:ycm_show_diagnostics_ui=0
+""let g:ycm_min_num_of_chars_for_completion = 4
+""let g:ycm_min_num_identifier_canddate_chars = 4
+""let g:ycm_enable_diagnastic_highlighting =0
+""
+""set completeopt-=preview
+""let g:ycm_add_preview_to_completeopt = 0
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -359,3 +360,14 @@ colorscheme gruvbox
 ""javascript / typescript
 autocmd BufEnter *.{js.jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js.jsx,ts,tsx} :syntax sync clear
+
+""""""""""""""""""""""""""""""""""""""""
+"coc
+""""""""""""""""""""""""""""""""""""""""
+let g:coc_global_extensions = [ 'coc-tsserver' ]
+let g:coc_disable_startup_warning = 1
+
+""""""""""""""""""""""""""""""""""""""""
+"hdl
+""""""""""""""""""""""""""""""""""""""""
+""au BufNewFile,BufRead *.sv,*svh,*.vh,*.v so ~/.vim/bundle/systemverilog.vim/syntax/systemverilog.vim
