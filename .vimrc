@@ -4,20 +4,20 @@
 set encoding=utf-8
 set nocompatible
 set termguicolors
-filetype off
+filetype plugin indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "plugin
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:polyglot_disabled = ['scala']
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " put plugin here
 
-Plugin 'gmarik/vundle'
+"Plugin 'gmarik/vundle'
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'Buffergator'
-
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'christoomey/vim-tmux-navigator'
@@ -25,19 +25,23 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'jistr/vim-nerdtree-tabs'
 "Plugin 'altercation/vim-colors-solarized'
 Plugin 'sheerun/vim-polyglot'
+Plugin 'derekwyatt/vim-scala'
 Plugin 'dense-analysis/ale'
 Plugin 'nikvdp/ejs-syntax'
-""Plugin 'pangloss/vim-javascript'
+"Plugin 'pangloss/vim-javascript'
 Plugin 'briancollins/vim-jst'
 Plugin 'vim-scripts/indentpython.vim'
 ""Plugin 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
-Plugin 'neoclide/coc.nvim' , {'branch' : 'release'}
-Bundle 'davidhalter/jedi-vim'
+"Bundle 'Shougo/deoplete.nvim'
+"Bundle 'roxma/nvim-yarp'
+"Bundle 'roxma/vim-hug-neovim-rpc'
+"Bundle 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'morhetz/gruvbox'
+Plugin 'joshdick/onedark.vim'
 ""Plugin 'suoto/vim-hdl'
-""Plugin 'vhda/verilog_systemverilog.vim'
-""Plugin 'Cognoscan/vim-vhdl'
+Plugin 'vhda/verilog_systemverilog.vim'
+Plugin 'Cognoscan/vim-vhdl'
 ""Plugin 'xolox/vim-tlv-mode'
 ""Plugin 'patstockwell/vim-monokai-tasty'
 ""Plugin 'rdnetto/YCM-Generator'
@@ -49,10 +53,15 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'peitalin/vim-jsx-typescript'
 Plugin 'styled-components/vim-styled-components', { 'branch': 'main'}
 Plugin 'jparise/vim-graphql'
+Plugin 'racer-rust/vim-racer'
+Plugin 'rust-lang/rust.vim'
+Plugin 'neoclide/coc.nvim', { 'branch': 'release'}
+""Plugin 'eclim', { 'pinned': 1 }
 
 "plugin line end here
 call vundle#end()
 filetype plugin indent on
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "set filetype
@@ -105,16 +114,23 @@ set shiftround
 """"""""""""""""""""""""""""
 ""python setting
 """"""""""""""""""""""""""""
-"au BufNewFile,BufRead *.py "
-"\ set tabstop=4
-"\ set softtabstop=4
-"\ set shiftwidth=4
-"\ set textwidth=79
-"\ set expandtab
-"\ set autoindent
-"\ set fileformat=unix
-"
-""auto add python header --start
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
+
+let python_highlight_all=1
+
+""python with virtualenv support
+"py << EOF
+"    import os
+"    import sys
+"    if 'VIRTUAL_ENV' in os.environ:
+"        project_base_dir = os.environ['VIRTUAL_ENV']
+"        activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"        execfile(activate_this, dict(__file__=activate_this))
+"EOF
+
+
+"auto add python header --start
 "autocmd BufNewFile *.py 0r ~/.vim/vim_template/vim_python_header
 "autocmd BufNewFile *.py ks|call FileName()|'s
 "autocmd BufNewFile *.py ks|call CreatedTime()|'s
@@ -151,6 +167,7 @@ set shiftround
 ""    let &errorformat = ef
 ""endfunction
 nmap <F9> :!python %<cr>
+
 """"""""""""""""""""""""""""""""""""""""
 "vim navigation with file tabs
 """"""""""""""""""""""""""""""""""""""""
@@ -168,6 +185,11 @@ nnoremap N Nzz
 
 xnoremap p pgvy
 imap <C-v> <C-r>"
+
+""""""""""""""""""""""""""""""""""""""""
+"label bas whitespace
+""""""""""""""""""""""""""""""""""""""""
+"au BufRead,BufNewFile *.py,*pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 """"""""""""""""""""""""""""""""""""""""
 "word wrap without line breaks
@@ -231,7 +253,7 @@ inoremap ' ''<ESC>i
 """"""""""""""""""""""""""""""""""""""""
 nnoremap <leader>f :NERDTreeFind<cr>
 nnoremap <leader>o :NERDTreeTabsOpen<cr>
-nnoremap <leader>f :NERDTreeTabsClose<cr>
+nnoremap <leader>c :NERDTreeTabsClose<cr>
 nmap <C-n> :NERDTreeToggle<cr>
 
 "let g:lightline={
@@ -268,17 +290,20 @@ nnoremap <C-X> :bdelete<CR>
 let g:ale_fixers={
                         \ '*': ['remove_trailing_lines', 'trim_whitespace'],
         		        \ 'javascript':['eslint'],
-                        \ 'typescript':['prettier'],
+                        \ 'typescript':['prettier', 'eslint'],
                         \ 'css':['prettier'],
                         \ 'html':['prettier'],
                         \}
 
 let g:ale_linters={
                         \ 'javascript': ['eslint'],
-                        \ 'typescript':['tsserver', 'tslint'],
+                        \ 'typescript':['eslint', 'tsserver'],
                         \ 'python': ['pylint'],
                         \ 'haskell': ['hlint', 'hdevtools', 'hfmt'],
                         \}
+
+let g:ale_linters.rust = ['cargo', 'rls']
+let g:ale_rust_rls_toolchain = 'stable'
 
 ""nnoremap ]r :ALENextWrap<CR>
 ""nnoremap [r :ALEPreviousWrap<CR>
@@ -308,12 +333,17 @@ let g:ale_cpp_cppcheck_options=''
 "                                \ 'g:ycm_python_sys_path'
 "                                \]
 "
-"""let g:ycm_global_ycm_extra_conf='~/global_etra_conf.py'
-""let g:SimplyIFold_docstring_preview=1
-""let g:ycm_server_python_interpreter='/usr/bin/python3'
-""let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-""let g:ycm_autoclose_preview_window_after_completion=1
-""map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"let g:ycm_global_ycm_extra_conf='~/global_etra_conf.py'
+let g:SimplyIFold_docstring_preview=1
+let g:ycm_server_python_interpreter='/usr/bin/python3'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+""""""""""""""""""""""""""""""""""""""""
+"deoplete
+""""""""""""""""""""""""""""""""""""""""
+let g:deoplete#enable_at_startup = 1
 
 """"""""""""""""""""""""""""""""""""""""
 "psf/black
@@ -327,13 +357,13 @@ let g:ale_cpp_cppcheck_options=''
 "YCM-Generator
 """"""""""""""""""""""""""""""""""""""""
 ""noremap <C-I> :YcmGenerateConfig -c g++ -v -x c++ -f -b make .<CR>
-""let g:ycm_show_diagnostics_ui=0
-""let g:ycm_min_num_of_chars_for_completion = 4
-""let g:ycm_min_num_identifier_canddate_chars = 4
-""let g:ycm_enable_diagnastic_highlighting =0
-""
-""set completeopt-=preview
-""let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui=0
+let g:ycm_min_num_of_chars_for_completion = 4
+let g:ycm_min_num_identifier_canddate_chars = 4
+let g:ycm_enable_diagnastic_highlighting =0
+
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -349,11 +379,6 @@ let g:gruvbox_contrast_dark = 'hard'
 set background=dark
 colorscheme gruvbox
 
-""colorscheme desert
-
-"colorscheme verilog_systemverilog
-
-""colorscheme darkblue
 ""let &termencoding=&encoding
 ""set fileencodings=utf-8,gbk,ucs-bom,cp936
 
@@ -361,13 +386,84 @@ colorscheme gruvbox
 autocmd BufEnter *.{js.jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js.jsx,ts,tsx} :syntax sync clear
 
+
+""""""""""""""""""""""""""""""""""""""""
+"rust vim-racer
+""""""""""""""""""""""""""""""""""""""""
+""au FileType rust namp gd <Plug>(rust-def)
+""au FileType rust namp gs <Plug>(rust-def-split)
+""au FileType rust namp gx <Plug>(rust-def-vertical)
+""au FileType rust namp <leader>gd <Plug>(rust-doc)
+
+
 """"""""""""""""""""""""""""""""""""""""
 "coc
 """"""""""""""""""""""""""""""""""""""""
-let g:coc_global_extensions = [ 'coc-tsserver' ]
-let g:coc_disable_startup_warning = 1
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+set hidden
+set nobackup
+set nowritebackup
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
+au BufRead,BufNewFile *.sbt.*sc set filetype=scala
+
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implemention)
+nmap <silent> gr <Plug>(coc-references)
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+    else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+endfunction
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+nmap <leader>rn <Plug>(coc-rename)
+
+augroup mygroup
+    autocmd!
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+xmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>a <Plug>(coc-codeaction-selected)
+
+""""""""""""""""""""""""""""""""""""""""
+"verilog | system verilog
+""""""""""""""""""""""""""""""""""""""""
+autocmd BufRead,BufNewFile *.v set filetype=verilog
+autocmd BufNewFile,BufRead *.sv,*.v so ~/.vim/syntax/verilog_systemverilog.vim
 
 """"""""""""""""""""""""""""""""""""""""
 "hdl
 """"""""""""""""""""""""""""""""""""""""
 ""au BufNewFile,BufRead *.sv,*svh,*.vh,*.v so ~/.vim/bundle/systemverilog.vim/syntax/systemverilog.vim
+
+
+""""""""""""""""""""""""""""""""""""""""
+"full stack
+""""""""""""""""""""""""""""""""""""""""
+au BufNewFile,BufRead *.js,*.html,*css
+    \ set tabstop=2 softtabstop=2 shiftwidth=2
