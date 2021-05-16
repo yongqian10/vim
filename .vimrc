@@ -9,7 +9,7 @@ filetype plugin indent on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "plugin
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:polyglot_disabled = ['scala']
+let g:polyglot_disabled = ['scala', 'c', 'cpp']
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -51,11 +51,14 @@ Plugin 'Cognoscan/vim-vhdl'
 Plugin 'pangloss/vim-javascript'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'peitalin/vim-jsx-typescript'
-Plugin 'styled-components/vim-styled-components', { 'branch': 'main'}
+Plugin 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plugin 'jparise/vim-graphql'
 Plugin 'racer-rust/vim-racer'
 Plugin 'rust-lang/rust.vim'
-Plugin 'neoclide/coc.nvim', { 'branch': 'release'}
+Plugin 'neoclide/coc.nvim', { 'for': [ 'cpp', 'json', 'cmake' ], 'branch': 'release' }
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'rhysd/vim-clang-format', { 'for' : ['c', 'cpp'] }
+Plugin 'jackguo380/vim-lsp-cxx-highlight'
 ""Plugin 'eclim', { 'pinned': 1 }
 
 "plugin line end here
@@ -300,6 +303,8 @@ let g:ale_linters={
                         \ 'typescript':['eslint', 'tsserver'],
                         \ 'python': ['pylint'],
                         \ 'haskell': ['hlint', 'hdevtools', 'hfmt'],
+                        \ 'cpp': ['clangtidy'],
+                        \ 'c': ['clangtidy'],
                         \}
 
 let g:ale_linters.rust = ['cargo', 'rls']
@@ -310,17 +315,24 @@ let g:ale_rust_rls_toolchain = 'stable'
 
 let g:ale_lint_on_text_changed='normal'
 let g:ale_lint_on_insert_leave=1
-let g:ale_c_cppcheck_option='--enable=all'
-let g:ale_cpp_cppcheck_options='--enable=all'
+"let g:ale_c_cppcheck_option='--enable=all'
+"let g:ale_cpp_cppcheck_options='--enable=all'
 let g:ale_linters_explicit=1
 let g:ale_sign_error='>>'
 let g:ale_sign_warning='--'
 let g:ale_fix_on_save=1
 
-let g:ale_c_gcc_options='-Wa11 -O2 -std=c99'
-let g:ale_cpp_gcc_options='-Wa11 -O2 -std=c++14'
-let g:ale_c_cppcheck_options=''
-let g:ale_cpp_cppcheck_options=''
+"let g:ale_c_gcc_options='-Wa11 -O2 -std=c99'
+"let g:ale_cpp_gcc_options='-Wa11 -O2 -std=c++14'
+"let g:ale_c_cppcheck_options=''
+"let g:ale_cpp_cppcheck_options=''
+
+let g:ale_cpp_clangtidy_checks = []
+let g:ale_cpp_clangtidy_executable = 'clang-tidy'
+let g:ale_c_parse_compile_commands=1
+let g:ale_cpp_clangtidy_extra_options=''
+let g:ale_cpp_clangtidy_options=''
+let g:ale_set_balloons=1
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -467,3 +479,18 @@ autocmd BufNewFile,BufRead *.sv,*.v so ~/.vim/syntax/verilog_systemverilog.vim
 """"""""""""""""""""""""""""""""""""""""
 au BufNewFile,BufRead *.js,*.html,*css
     \ set tabstop=2 softtabstop=2 shiftwidth=2
+
+
+""""""""""""""""""""""""""""""""""""""""
+"clang
+""""""""""""""""""""""""""""""""""""""""
+let g:clang_format#command='clang-format-12'
+let g:clang_format#auto_format=1
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11",
+            \ "BreakBeforeBraces": "Stroustrup"}
+
+autocmd FileType c cpp ClangFormatAutoEnable
