@@ -1,4 +1,12 @@
 {
+    "coc.preferences.silentAutoupdate": true,
+    "coc.preferences.colorSupport": true,
+    "coc.preferences.formatOnSaveFiletypes": ["cpp"],
+
+    "suggest.autoTrigger": "always",
+    "suggest.triggerAfterInsertEnter": true,
+    "diagnostic.displayByAle": false,
+
     "languageserver": {
         "clangd": {
             "command": "clangd-12",
@@ -34,6 +42,20 @@
                 "--log=error",
                 "--pretty"
             ]
+        },
+        "haskell": {
+            "command": "haskell-language-server-wrapper",
+            "args": ["--lsp"],
+            "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
+            "filetypes": ["haskell", "lhaskell"],
+            "initializationOptions": {
+                "languageserverHaskell": {
+                    "hlintOn": true,
+                    "completionSnippetsOn": true
+                }
+            }
+
         }
+
     }
 }

@@ -31,7 +31,7 @@ Plugin 'nikvdp/ejs-syntax'
 "Plugin 'pangloss/vim-javascript'
 Plugin 'briancollins/vim-jst'
 Plugin 'vim-scripts/indentpython.vim'
-""Plugin 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
+"Plugin 'Valloric/YouCompleteMe', {'do': './install.py --tern-completer'}
 "Bundle 'Shougo/deoplete.nvim'
 "Bundle 'roxma/nvim-yarp'
 "Bundle 'roxma/vim-hug-neovim-rpc'
@@ -39,14 +39,14 @@ Plugin 'vim-scripts/indentpython.vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'morhetz/gruvbox'
 Plugin 'joshdick/onedark.vim'
-""Plugin 'suoto/vim-hdl'
+"Plugin 'suoto/vim-hdl'
 Plugin 'vhda/verilog_systemverilog.vim'
 Plugin 'Cognoscan/vim-vhdl'
-""Plugin 'xolox/vim-tlv-mode'
-""Plugin 'patstockwell/vim-monokai-tasty'
-""Plugin 'rdnetto/YCM-Generator'
-""Plugin 'tell-k/vim-autopep8'
-""Plugin 'wsdjeg/FlyGrep.vim'
+"Plugin 'xolox/vim-tlv-mode'
+"Plugin 'patstockwell/vim-monokai-tasty'
+"Plugin 'rdnetto/YCM-Generator'
+"Plugin 'tell-k/vim-autopep8'
+"Plugin 'wsdjeg/FlyGrep.vim'
 "Plugin 'psf/black'
 Plugin 'pangloss/vim-javascript'
 Plugin 'leafgarland/typescript-vim'
@@ -55,11 +55,13 @@ Plugin 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plugin 'jparise/vim-graphql'
 Plugin 'racer-rust/vim-racer'
 Plugin 'rust-lang/rust.vim'
-Plugin 'neoclide/coc.nvim', { 'for': [ 'cpp', 'json', 'cmake' ], 'branch': 'release' }
+Plugin 'neoclide/coc.nvim', { 'branch': 'release' }
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'rhysd/vim-clang-format', { 'for' : ['c', 'cpp'] }
 Plugin 'jackguo380/vim-lsp-cxx-highlight'
-""Plugin 'eclim', { 'pinned': 1 }
+Plugin 'OmniSharp/omnisharp-vim'
+Plugin 'neovimhaskell/haskell-vim'
+"Plugin 'eclim', { 'pinned': 1 }
 
 "plugin line end here
 call vundle#end()
@@ -115,7 +117,7 @@ set cindent
 set shiftround
 
 """"""""""""""""""""""""""""
-""python setting
+"python setting
 """"""""""""""""""""""""""""
 au BufNewFile,BufRead *.py
     \ set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
@@ -155,20 +157,20 @@ let python_highlight_all=1
 "    endif
 "    exe "1,".l."g/Created Time:.*/s/Created Time:./Created Time:".strftime("%Y-%m-%d %T")
 "endfun
-""auto add python header --end
+"auto add python header --end
 
-""map <F5> :Autopep8<CR> :w<CR> :call RunPython()<CR>
-""function RunPython()
-""    let mp = &makeprg
-""    let ef = &errorformat
-""    let exeFile = expand("%:t")
-""    setlocal makeprg=python\ -u
-""    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %1%.%#,%Z%[%^\ ]%\\@=%m
-""    silent make %
-""    copen
-""    let &makeprg = mp
-""    let &errorformat = ef
-""endfunction
+"map <F5> :Autopep8<CR> :w<CR> :call RunPython()<CR>
+"function RunPython()
+"    let mp = &makeprg
+"    let ef = &errorformat
+"    let exeFile = expand("%:t")
+"    setlocal makeprg=python\ -u
+"    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %1%.%#,%Z%[%^\ ]%\\@=%m
+"    silent make %
+"    copen
+"    let &makeprg = mp
+"    let &errorformat = ef
+"endfunction
 nmap <F9> :!python %<cr>
 
 """"""""""""""""""""""""""""""""""""""""
@@ -187,7 +189,7 @@ nnoremap n nzz
 nnoremap N Nzz
 
 xnoremap p pgvy
-imap <C-v> <C-r>"
+imap <C-v> <C-r>
 
 """"""""""""""""""""""""""""""""""""""""
 "label bas whitespace
@@ -305,13 +307,14 @@ let g:ale_linters={
                         \ 'haskell': ['hlint', 'hdevtools', 'hfmt'],
                         \ 'cpp': ['clangtidy'],
                         \ 'c': ['clangtidy'],
+                        \ 'cs': ['OmniSharp'],
                         \}
 
 let g:ale_linters.rust = ['cargo', 'rls']
 let g:ale_rust_rls_toolchain = 'stable'
 
-""nnoremap ]r :ALENextWrap<CR>
-""nnoremap [r :ALEPreviousWrap<CR>
+"nnoremap ]r :ALENextWrap<CR>
+"nnoremap [r :ALEPreviousWrap<CR>
 
 let g:ale_lint_on_text_changed='normal'
 let g:ale_lint_on_insert_leave=1
@@ -333,6 +336,8 @@ let g:ale_c_parse_compile_commands=1
 let g:ale_cpp_clangtidy_extra_options=''
 let g:ale_cpp_clangtidy_options=''
 let g:ale_set_balloons=1
+
+"let g:ale_disable_lsp = 1
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -391,10 +396,10 @@ let g:gruvbox_contrast_dark = 'hard'
 set background=dark
 colorscheme gruvbox
 
-""let &termencoding=&encoding
-""set fileencodings=utf-8,gbk,ucs-bom,cp936
+"let &termencoding=&encoding
+"set fileencodings=utf-8,gbk,ucs-bom,cp936
 
-""javascript / typescript
+"javascript / typescript
 autocmd BufEnter *.{js.jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js.jsx,ts,tsx} :syntax sync clear
 
@@ -402,10 +407,10 @@ autocmd BufLeave *.{js.jsx,ts,tsx} :syntax sync clear
 """"""""""""""""""""""""""""""""""""""""
 "rust vim-racer
 """"""""""""""""""""""""""""""""""""""""
-""au FileType rust namp gd <Plug>(rust-def)
-""au FileType rust namp gs <Plug>(rust-def-split)
-""au FileType rust namp gx <Plug>(rust-def-vertical)
-""au FileType rust namp <leader>gd <Plug>(rust-doc)
+"au FileType rust namp gd <Plug>(rust-def)
+"au FileType rust namp gs <Plug>(rust-def-split)
+"au FileType rust namp gx <Plug>(rust-def-vertical)
+"au FileType rust namp <leader>gd <Plug>(rust-doc)
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -471,7 +476,7 @@ autocmd BufNewFile,BufRead *.sv,*.v so ~/.vim/syntax/verilog_systemverilog.vim
 """"""""""""""""""""""""""""""""""""""""
 "hdl
 """"""""""""""""""""""""""""""""""""""""
-""au BufNewFile,BufRead *.sv,*svh,*.vh,*.v so ~/.vim/bundle/systemverilog.vim/syntax/systemverilog.vim
+"au BufNewFile,BufRead *.sv,*svh,*.vh,*.v so ~/.vim/bundle/systemverilog.vim/syntax/systemverilog.vim
 
 
 """"""""""""""""""""""""""""""""""""""""
@@ -494,3 +499,21 @@ let g:clang_format#style_options = {
             \ "BreakBeforeBraces": "Stroustrup"}
 
 autocmd FileType c cpp ClangFormatAutoEnable
+
+
+""""""""""""""""""""""""""""""""""""""""
+"omnisharp
+""""""""""""""""""""""""""""""""""""""""
+"autocmd FileType cs OmniSharpStartServer
+"
+"
+""""""""""""""""""""""""""""""""""""""""
+"haskell
+""""""""""""""""""""""""""""""""""""""""
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_arrowsyntax = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_static_pointers = 1
+let g:haskell_backpack = 1
