@@ -273,7 +273,7 @@ boost-lib:
 		rm -rf boost_$(_BOOST_VERSION_) && \
 		tar -xzvf boost_$(_BOOST_VERSION_).tar.gz && \
 		cd boost_$(_BOOST_VERSION_) && \
-		patch ./boost/thread/pthread/thread_data.hpp  < ../boost_1_70_0_boost_thread_pthread_thread_data_hpp.patch && \
+		patch ./boost/thread/pthread/thread_data.hpp  < ../fix-boost-pthread.patch && \
 		./bootstrap.sh --prefix=$(BOOST_BUILD_PATH) && \
 		if [ $$? -eq 0 ]; then \
 			echo 'Bootstrap succeeded, running b2 install...' ; \
@@ -331,6 +331,7 @@ qt6-lib:
 		rm -rf qt-everywhere-src-$(QT6_VERSION) && \
 		tar -xvf qt-everywhere-opensource-src-$(QT6_VERSION).tar.xz && \
 		cd qt-everywhere-src-$(QT6_VERSION) ; \
+		patch ./qtwebengine/src/3rdparty/chromium/content/browser/BUILD.gn  < ../fix-qt-spellcheck-buildflags.patch && \
 		rm -rf build && \
 		mkdir build && \
 		cd build && \

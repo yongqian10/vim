@@ -8,41 +8,42 @@
     "diagnostic.displayByAle": false,
 
     "languageserver": {
-        "clangd": {
-            "command": "clangd-12",
-            "filetypes": [
-                "c",
-                "cpp"
-            ],
-            "rootPatterns": [
-                "compile_commands.json",
-                "WORKSPACE",
-                ".git"
-            ],
-            "initializationOptions": {
-                "clangd.semanticHighlighting": true
-            },
-            "args": [
-                "--compile-commands-dir=build",
-                "--compile_args_from=filesystem",
-                "--all-scopes-completion",
-                "--background-index",
-                "--clang-tidy",
-                "--cross-file-rename",
-                "--completion-parse=always",
-                "--completion-style=detailed",
-                "--function-arg-placeholders",
-                "--header-insertion-decorators",
-                "--query-driver=/usr/bin/clang-12,/usr/bin/g++",
-                "--header-insertion=never",
-                "--suggest-missing-includes",
-                "--limit-results=0",
-                "-j=6",
-                "--pch-storage=memory",
-                "--log=error",
-                "--pretty"
-            ]
-        },
+        // managed by coc-nvim
+        //"clangd": {
+        //    "command": "clangd-12",
+        //    "filetypes": [
+        //        "c",
+        //        "cpp"
+        //    ],
+        //    "rootPatterns": [
+        //        "compile_commands.json",
+        //        "WORKSPACE",
+        //        ".git"
+        //    ],
+        //    "initializationOptions": {
+        //        "clangd.semanticHighlighting": true
+        //    },
+        //    "args": [
+        //        "--compile-commands-dir=build",
+        //        "--compile_args_from=filesystem",
+        //        "--all-scopes-completion",
+        //        "--background-index",
+        //        "--clang-tidy",
+        //        "--cross-file-rename",
+        //        "--completion-parse=always",
+        //        "--completion-style=detailed",
+        //        "--function-arg-placeholders",
+        //        "--header-insertion-decorators",
+        //        "--query-driver=/usr/bin/clang-12,/usr/bin/g++",
+        //        "--header-insertion=never",
+        //        "--suggest-missing-includes",
+        //        "--limit-results=0",
+        //        "-j=6",
+        //        "--pch-storage=memory",
+        //        "--log=error",
+        //        "--pretty"
+        //    ]
+        //},
         "haskell": {
             "command": "haskell-language-server-wrapper",
             "args": ["--lsp"],
