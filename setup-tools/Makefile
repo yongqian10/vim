@@ -6,7 +6,7 @@ GCC_VERSION := 10.2.0
 _GCC_VERSION_ := 102
 OPENSSL_VERSION := 1.1.1w
 _OPENSSL_VERSION_ := 1_1_1w
-PYTHON3_VERSION := 3.13.7
+PYTHON3_VERSION := 3.7.4
 GMOCK_VERSION :=
 LIBUSB1_VERSION :=
 TCL_VERSION := 8.6.10
@@ -234,6 +234,7 @@ python3-lib:
 		mkdir -p Python-$(PYTHON3_VERSION) && \
 		tar -xvf Python-$(PYTHON3_VERSION).tar.xz -C Python-$(PYTHON3_VERSION) --strip-components=1 && \
 		cd Python-$(PYTHON3_VERSION) && \
+		patch ./Modules/faulthandler.c  < ../fix-python374-faulthandler-test-stuck.patch && \
 		export LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(LD_LIBRARY_PATH):$(TCL_BUILD_PATH)/lib && \
 		export PYTHONHOME='' && \
 		TCLTK_LIBS='-L$(TCL_BUILD_PATH)/lib -ltk8.6 -ltcl8.6' \
@@ -273,7 +274,7 @@ boost-lib:
 		rm -rf boost_$(_BOOST_VERSION_) && \
 		tar -xzvf boost_$(_BOOST_VERSION_).tar.gz && \
 		cd boost_$(_BOOST_VERSION_) && \
-		patch ./boost/thread/pthread/thread_data.hpp  < ../fix-boost-pthread.patch && \
+		patch ./boost/thread/pthread/thread_data.hpp  < ../fix-boost-pthread.patch && \
 		./bootstrap.sh --prefix=$(BOOST_BUILD_PATH) && \
 		if [ $$? -eq 0 ]; then \
 			echo 'Bootstrap succeeded, running b2 install...' ; \
@@ -335,12 +336,12 @@ qt6-lib:
 		rm -rf build && \
 		mkdir build && \
 		cd build && \
-		python3 -m pip install html5lib && \
+		python3 -m pip install html5lib importlib-metadata && \
 		../configure \
 			-prefix $(QT6_BUILD_PATH) \
 			-opensource -confirm-license \
 			-nomake examples -nomake tests \
-			-no-opengl && \
+			-openssl-linked OPENSSL_ROOT_DIR=$(OPENSSL_BUILD_PATH) && \
 		$(CMAKE_BUILD_PATH)/bin/cmake --build . --parallel $(NPROC) && \
 		if [ $$? -eq 0 ]; then \
 			$(CMAKE_BUILD_PATH)/bin/cmake --install . ; \

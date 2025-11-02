@@ -1,0 +1,4 @@
+60c60
+< #if PTHREAD_STACK_MIN > 0
+---
+> #ifdef PTHREAD_STACK_MIN

@@ -1,0 +1,10 @@
+--- qt-everywhere-src-6.5.6/qtwebengine/src/3rdparty/chromium/content/browser/BUILD.gn	2025-06-02 21:39:22.000000000 +0000
++++ BUILD.gn	2025-10-31 16:05:31.677511881 +0000
+@@ -51,6 +51,7 @@
+     "//services/viz/privileged/mojom",
+     "//third_party/blink/public/mojom:mojom_platform",
+     "//third_party/inspector_protocol:crdtp",
++    "//components/spellcheck:buildflags",
+   ]
+ 
+   sources = [
